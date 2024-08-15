@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,14 +20,14 @@ export class LoginComponent {
   constructor(private router: Router, private loginService: LoginService) {}
 
   onLogin():void{
-    this.mensagemErro = ''
+    
     const USER: LoginUser = { email: this.usuario, senha: this.senha }
     this.loginService.login(USER).subscribe({
       next: (retorno: any) =>{
-        console.log(retorno)
+        localStorage.setItem('token', retorno.accessToken)
       },
-      error: (error) =>{
-        console.log(error)
+      error: (error: HttpErrorResponse) =>{
+         this.mensagemErro = error.error.this.mensagemErro
       }
     })
     
